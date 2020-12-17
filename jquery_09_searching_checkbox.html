@@ -1,0 +1,163 @@
+<!-- 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_09_searching.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    => 
+ -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+    .xxx {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .style1{
+        background-color: #f9d4e8;
+        color: #fff;
+    }
+</style>
+<script src="jquery-1.11.0.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    // class = sungjuk 을 가진 태그를 관리하는
+    // JQuery 객체의 메위주를 변수 sungjukObj에 저장
+    var sungjukObj = $(".sungjuk");
+
+    // thead 태그 안의 tr의 배경색을 바꾸기
+    sungjukObj.find("thead tr").css({"background-color" : "#99c5ff"})
+
+    // tbody 태그 안의 짝수행 tr의 배경색을 핑크로 바꾸기 
+    sungjukObj.find("tbody tr:odd").css({ "background-color": "#f9d4e8"})
+
+    // class=count 를 가진 태그를 관리하는 JQuery 객체의 text 메소드를 호출하여
+    // class=count 를 가진 태그 내부에 보이는 행의 개수 삽입하기
+    $(".count").text(sungjukObj.find("tbody tr").length+" 개")
+
+    $(".search").click(function(){
+
+        
+
+        // 체크된 학점이 없으면 함수 중단.
+        var hakjumObj = $("[name='hakjum']").filter(":checked");
+
+        if(hakjumObj.length==0){
+            alert("체크를 하나 이상 하셔야됩니다.")
+            return;
+        }
+
+        // 체크된 checkbox의 value 값을 젖아할 Array 객체 생성하기
+        var hakjums = [];
+
+        // 체크된 놈의 value 값을 Array 객체에 저장하기
+        for(var i=0; i<hakjumObj.length; i++){
+            var obj = hakjumObj.eq(i);
+            var value = obj.val();
+            hakjums.push(value);
+        }
+        // 모든 tr 감추기 
+        var trs_Obj = sungjukObj.find("tbody tr");
+        trs_Obj.hide();
+        // 모든 tr 배경색 지우기 
+        trs_Obj.css({"background-color":""})
+
+        var cnt=0;
+        for(var i=0; i<trs_Obj.length; i++){
+            
+            var tr_Obj = trs_Obj.eq(i);
+
+            var td3_Text = tr_Obj.find("td").eq(2).text();
+
+            td3_Text= parseInt(td3_Text,10);
+            var hakjum = "F";
+            if(td3_Text>=90){hakjum = "A";}
+            else if(td3_Text>80){hakjum = "B";}
+            else if(td3_Text>70){hakjum = "C";}
+            else if(td3_Text>60){hakjum = "D";}
+            
+            for(var j=0; j<hakjums.length; j++){
+                if(hakjum==hakjums[j]){
+                    tr_Obj.show();
+                    if(cnt%2==1){
+                       tr_Obj.css({"background-color":"#f9d4e8"}) 
+                    }
+                    cnt++;
+                }
+            }
+   
+        }
+        //---------------------------------------------------------------
+        // class=count 를 가진 태그를 관리하는 JQuery 객체의 text 메소드를 호출하여
+        // class=count 를 가진 태그 내부에 보이는 행의 개수 삽입하기
+        //---------------------------------------------------------------
+        $(".count").text(cnt+" 개");
+
+    });
+    // class=allSearch 를 가진 태그에 click 이벤트가 일어나면
+    // 모든 행을 보여주는 코딩 설정하기
+    $('.allSearch').click(function(){
+
+        sungjukObj.find("tbody tr").css({"background-color":""})
+
+        sungjukObj.find("tbody tr:odd").css({"background-color":"#f9d4e8"})
+
+        sungjukObj.find("tbody tr").show();
+
+        // 모든 체크박스 체크 풀기 
+        $("[name='hakjum']").prop("checked",false);
+
+        //---------------------------------------------------------------
+        // class=count 를 가진 태그를 관리하는 JQuery 객체의 text 메소드를 호출하여
+        // class=count 를 가진 태그 내부에 보이는 행의 개수 삽입하기
+        //---------------------------------------------------------------
+        $(".count").text(sungjukObj.find("tbody tr").length+" 개")
+
+    });
+});
+</script>
+</head>
+<body class="xxx"><center>
+            검색조건<br><br>
+            <input type="checkbox" name="hakjum" value="A" > A학점
+            <input type="checkbox" name="hakjum" value="B" > B학점
+            <input type="checkbox" name="hakjum" value="C" > C학점
+            <input type="checkbox" name="hakjum" value="D" > D학점
+            <input type="checkbox" name="hakjum" value="F" > F학점
+
+            <br><br>
+           <input type="button" value="검색" class="search">
+           <input type="button" value="모두 검색" class="allSearch"><br><br>
+
+            <div class="count"></div>
+
+    <table border="2" cellpadding="7"  class="sungjuk" style="border-collapse: collapse;" cellspacing=0>
+        <thead>
+            <tr><th>번호<th>이름<th>평균
+        </thead>
+        <tbody align="center">
+            <tr><td>101<td>John<td>87
+            <tr><td>102<td>KimYeongjin<td>90
+            <tr><td>103<td>JeongYeongwoo<td>85
+            <tr><td>104<td>ParkMooun<td>92
+            <tr><td>105<td>Handonghee<td>65
+            <tr><td>106<td>KwonPanjun<td>83
+            <tr><td>107<td>WooChoonsik<td>75
+            <tr><td>108<td>HongGyujin<td>42
+            <tr><td>109<td>JiSanghwa<td>64
+            <tr><td>110<td>JeongGyeongsu<td>17
+            <tr><td>111<td>ChoiSeungyong<td>59
+            <tr><td>112<td>JeongJiwoong<td>48
+            <tr><td>113<td>JeonJaeho<td>39
+            <tr><td>114<td>KimYeongtak<td>82
+            <tr><td>115<td>ChoiSeungmin<td>79
+            <tr><td>116<td>WooMingu<td>62
+            <tr><td>117<td>KimJonghyeok<td>72
+            <tr><td>118<td>아이린<td>99
+        </tbody>
+    </table>
+    
+</body>
+</html>

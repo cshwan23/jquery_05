@@ -1,0 +1,142 @@
+<!-- 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jquery_09_searching.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    => 
+ -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+    .xxx {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .style1{
+        background-color: #f9d4e8;
+        color: #fff;
+    }
+</style>
+<script src="jquery-1.11.0.min.js"></script>
+<script>
+$(document).ready(function(){
+
+    // class = sungjuk 을 가진 태그를 관리하는
+    // JQuery 객체의 메위주를 변수 sungjukObj에 저장
+    var sungjukObj = $(".sungjuk");
+
+    // thead 태그 안의 tr의 배경색을 바꾸기
+    sungjukObj.find("thead tr").css({"background-color" : "#99c5ff"})
+
+    // tbody 태그 안의 짝수행 tr의 배경색을 핑크로 바꾸기 
+    sungjukObj.find("tbody tr:odd").css({ "background-color": "#f9d4e8"})
+
+    // class=search 를 가진 태그에 click 이벤트가 발생하면
+    // 키워드를 가지고 검색한 후 검색된 행만 보여주는 코딩 설정하기
+    $(".search").click(function(){
+
+        // 입력된 키워드 값을 얻어내어 변수에 저장해야한다.
+        var keyword1 = $(".keyword1").val();
+
+        // 공백만 입력하고 검색을 누를 경우 검색안해준다..
+        // 1.공백이 있으면 2.경고하고 3.키워드 비우고 4.중지
+        if(keyword1.split(" ").join("")==""){
+
+            alert("공백 있으면 안됩니다.");
+            $(".keyword1").val("");
+            return;
+        }
+
+        //키워드 변수 안에 저장된 데이터의 앞뒤 공백 제거
+        keyword1 = $.trim(keyword1);
+
+        //---------------------------------------
+        // 1. 입력한 문자를 대문자로 통일하고
+        // 2. 검색 당한 놈의 문자도 대문자로 통일하고
+        // 3. 다시 검색당한 놈의 문자를 원래대로 돌려놓는다.
+        //---------------------------------------
+        //---------------------------------------
+        // 1. 입력한 문자를 대문자로 통일
+        //---------------------------------------
+        keyword1 = keyword1.toUpperCase();
+
+        //---------------------------------------
+        // 2. 검색 당할 놈의 문자도 대문자로 통일
+        //---------------------------------------
+        // 일단 모든행을 다 감춘다.
+        // class=sungjuk 가진 태그 후손의 tbody 태그후손의 tr 태그(17개tr)을 관리하는
+        // JQuery 객체의 메위주를 변수 trsObj에 저장하기
+        var trs_Obj = sungjukObj.find("tbody tr");
+
+        //table 태그 후손중 tbody 후손중 모든 tr을 감추기
+        trs_Obj.hide();
+
+        sungjukObj.find("tbody tr").css({"background-color":""})
+
+        var cnt = 0;
+        for(var i=0; i<trs_Obj.length; i++){
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // 검색되는 i번째 tr태그를 관리하는 jquery 객체의 메위주를 변수 tr1Obj에 저장하기
+            var tr_Obj = trs_Obj.eq(i);
+        
+            // 자식을 관리하는 메소드 = childeren(), find()
+            //i 번째 태그 내부의 1번째 td 태그가 안고 있는 문자열 얻고 대문자로 바꾸기
+            var td1_Text = tr_Obj.find("td").eq(0).text().toUpperCase();
+            //i 번째 태그 내부의 2번째 td 태그가 안고 있는 문자열 얻고 대문자로 바꾸기
+            var td2_Text = tr_Obj.find("td").eq(1).text().toUpperCase();
+            //i 번째 태그 내부의 3번째 td 태그가 안고 있는 문자열 얻고 대문자로 바꾸기
+            var td3_Text = tr_Obj.find("td").eq(2).text().toUpperCase();
+
+            // 1번째 또는 2번째 또는 3번째 td 태그가 안고있는 문자열에 keyword 변수 안의 데이터가 있으면
+            if((td1_Text.indexOf(keyword1)>=0)||
+                (td2_Text.indexOf(keyword1)>=0)||
+                (td3_Text.indexOf(keyword1)>=0)){
+
+                    tr_Obj.show();
+                    if(cnt%2==1){
+                        tr_Obj.css({"background-color":"#f9d4e8"})
+                    }
+                    cnt++;
+                }
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        }
+    });
+});
+</script>
+</head>
+<body class="xxx"><center>
+
+    키워드 : <input type="text" name="keyword1" class="keyword1">
+           <input type="button" value="검색" class="search">
+           <input type="button" value="모두 검색" class="allSearch"><br><br>
+
+    <table border="2" cellpadding="7"  class="sungjuk" style="border-collapse: collapse;" cellspacing=0>
+        <thead>
+            <tr><th>번호<th>이름<th>평균
+        </thead>
+        <tbody align="center">
+            <tr><td>101<td>John<td>87
+            <tr><td>102<td>KimYeongjin<td>90
+            <tr><td>103<td>JeongYeongwoo<td>85
+            <tr><td>104<td>ParkMooun<td>92
+            <tr><td>105<td>Handonghee<td>65
+            <tr><td>106<td>KwonPanjun<td>83
+            <tr><td>107<td>WooChoonsik<td>95
+            <tr><td>108<td>HongGyujin<td>42
+            <tr><td>109<td>JiSanghwa<td>54
+            <tr><td>110<td>JeongGyeongsu<td>17
+            <tr><td>111<td>ChoiSeungyong<td>59
+            <tr><td>112<td>JeongJiwoong<td>48
+            <tr><td>113<td>JeonJaeho<td>39
+            <tr><td>114<td>KimYeongtak<td>82
+            <tr><td>115<td>ChoiSeungmin<td>39
+            <tr><td>116<td>WooMingu<td>42
+            <tr><td>117<td>KimJonghyeok<td>82
+            <tr><td>118<td>아이린<td>99
+        </tbody>
+    </table>
+    
+</body>
+</html>
