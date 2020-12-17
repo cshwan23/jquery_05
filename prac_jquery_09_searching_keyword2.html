@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+    .xxx {
+        font-size: 11pt;
+        font-family:  Helvetica, sans-serif;
+    }
+</style>
+<script src="jquery-1.11.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        var obj = $(".sungjuk");
+
+        obj.find("thead tr").css({"background-color":"lightblue"});
+        obj.find("tbody tr:odd").css({"background-color":"pink"});
+
+        $(".search").click(function(){
+
+            var keyword1 = $(".keyword1").val()
+            var keyword2 = $(".keyword2").val()
+            var or_and = $(".or_and").val()
+
+            var is_keyword1 = keyword1.split(" ").join("")!="";
+            var is_keyword2 = keyword2.split(" ").join("")!="";
+            
+
+            if(keyword1.split(" ").join("")=="" && keyword2.split(" ").join("")==""){
+                alert("공백은 검색할 수 없습니다.");
+                $(".keyword1").val("");
+                return;
+            }
+            
+            
+            keyword1 = $.trim(keyword1);
+            keyword2 = $.trim(keyword2);
+
+            keyword1 = keyword1.toUpperCase();
+            keyword2 = keyword2.toUpperCase();
+
+            var trs_obj = obj.find("tbody tr");
+            trs_obj.hide();
+            trs_obj.css({"background-color":""});
+            
+            var cnt = 0;
+            for(var i = 0; i<trs_obj.length; i++){
+
+                var tr_obj = trs_obj.eq(i);
+
+                var td_text0 = tr_obj.find("td:eq(0)").text()
+                var td_text1 = tr_obj.find("td:eq(1)").text()
+                var td_text2 = tr_obj.find("td:eq(2)").text()
+                               
+                td_text1.toUpperCase()
+                
+                if(is_keyword1==true&&is_keyword2==false){
+
+                    if  ( td_text0.indexOf(keyword1)>=0 ||
+                            td_text1.indexOf(keyword1)>=0 ||
+                            td_text2.indexOf(keyword1)>=0  ) {
+
+                        tr_obj.show();
+                        
+                        if(cnt%2==1){
+                            tr_obj.css({"background-color":"pink"})
+                        }
+
+                        cnt++;
+                    }
+                
+                }else if(is_keyword1==false&&is_keyword2==true){
+                    if  ( td_text0.indexOf(keyword2)>=0 ||
+                            td_text1.indexOf(keyword2)>=0 ||
+                            td_text2.indexOf(keyword2)>=0  ) {
+
+                        tr_obj.show();
+                        
+                        if(cnt%2==1){
+                            tr_obj.css({"background-color":"pink"})
+                        }
+
+                        cnt++;
+                    }
+
+                
+                }else{
+
+                    if(or_and=="or"){
+
+
+                        if  ( td_text0.indexOf(keyword1)>=0 ||
+                            td_text1.indexOf(keyword1)>=0 ||
+                            td_text2.indexOf(keyword1)>=0 || 
+                            td_text0.indexOf(keyword2)>=0 ||
+                            td_text1.indexOf(keyword2)>=0 ||
+                            td_text2.indexOf(keyword2)>=0  ) {
+
+                            tr_obj.show();
+                            
+                            if(cnt%2==1){
+                                tr_obj.css({"background-color":"pink"})
+                            }
+
+                            cnt++;
+                        }
+
+
+
+                    }else{
+
+                        if  (( td_text0.indexOf(keyword1)>=0 ||
+                                td_text1.indexOf(keyword1)>=0 ||
+                                td_text2.indexOf(keyword1)>=0  )&& 
+                                ( td_text0.indexOf(keyword2)>=0 ||
+                                td_text1.indexOf(keyword2)>=0 ||
+                                td_text2.indexOf(keyword2)>=0  )){
+
+                            tr_obj.show();
+                            
+                            if(cnt%2==1){
+                                tr_obj.css({"background-color":"pink"})
+                            }
+
+                            cnt++;
+                        }
+
+                    }
+
+                }
+
+            }
+            $(".count").text(cnt+"개")
+
+        });
+
+        $(".allSearch").click(function(){
+            
+
+            obj.find("tbody tr").css({"background-color":""});
+            
+            obj.find("tbody tr").show();
+            
+            obj.find("tbody tr:odd").css({"background-color":"pink"});
+
+            $(".keyword1").val("");
+
+            $(".count").text(obj.find("tbody tr").length+"개");
+
+            
+        })
+
+
+        $(".count").text(obj.find("tbody tr").length+"개");
+
+    });
+
+</script>
+</head>
+<body class="xxx"><center>
+    키워드 : 
+    <input type="text" name="keyword1" class="keyword1" width="20" maxlength="13">
+    <select class="or_and">
+        <option value="or">or</option>
+        <option value="and">and</option>
+    </select>
+    <input type="text" name="keyword2" class="keyword2" width="20" maxlength="13">
+
+
+    <input type="button" value="검색" class="search">
+    <input type="button" value="모두 검색" class="allSearch">
+    
+
+
+    <br><br>
+    <div class="count"></div>
+
+    <table class="sungjuk" border="1" cellpadding=5 cellspacing=0 style="border-collapse: collapse;">
+        <thead>
+            <tr><th>번호<th>이름<th>평균
+        </thead>
+        <tbody align="center">
+            <tr><td>101<td>최승환<td>90
+            <tr><td>102<td>김세정<td>92
+            <tr><td>103<td>아이린<td>83
+            <tr><td>104<td>John<td>47
+            <tr><td>105<td>최승범<td>68
+            <tr><td>106<td>Park<td>84
+            <tr><td>107<td>박민정<td>79
+            <tr><td>108<td>신세경<td>63
+            <tr><td>109<td>David<td>70
+            <tr><td>110<td>유재석<td>52
+            <tr><td>111<td>Panjun<td>95
+            <tr><td>112<td>Kyujin<td>82
+            <tr><td>113<td>Sanghwa<td>71
+        </tbody>
+    </table>
+
+    
+</body>
+</html>

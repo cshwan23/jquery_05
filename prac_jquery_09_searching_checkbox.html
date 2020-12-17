@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+    .xxx {
+        font-size: 11pt;
+        font-family:  Helvetica, sans-serif;
+    }
+</style>
+<script src="jquery-1.11.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        var obj = $(".sungjuk");
+
+        obj.find("thead tr").css({"background-color":"lightblue"});
+        obj.find("tbody tr:odd").css({"background-color":"pink"});
+
+        $(".count").text(obj.find("tbody tr").length+"개");
+        
+        $(".search").click(function(){
+
+            // 1.체크가 되어있는지 확인해야
+            var hakjumObj = $("[name='hakjum']").filter(":checked");
+
+            if(hakjumObj.length==0){
+                alert("학점을 체크해야 검색 가능합니다.")
+                return;
+            }
+
+            // 2. 학점 담아.
+            var hakjums = [];
+
+            for(var i=0; i<hakjumObj.length; i++){
+                var hakjum = hakjumObj.eq(i)
+                var value = hakjum.val();
+
+                hakjums.push(value);
+
+            }
+
+            var trs_Obj = obj.find("tbody tr");
+            trs_Obj.hide();
+            trs_Obj.css({"background-color":""});
+
+            // 3. 테이블 행들의 점수와 하나하나 비교해서
+            //    맞으면 그 행을 화면에 보여줘
+
+            var cnt = 0;
+            for (var i = 0; i <trs_Obj.length; i++){
+
+                var tr_Obj = trs_Obj.eq(i);
+                var avg = parseInt(tr_Obj.find("td:eq(2)").text(),10);
+
+                var hakjum = "F";
+
+                if(avg>=90){
+                    hakjum = "A";
+                }else if(avg>=80){
+                    hakjum = "B";
+                }else if(avg>=70){
+                    hakjum = "C";
+                }else if(avg>=60){
+                    hakjum = "D";
+                }
+                
+                for(var j=0; j<hakjums.length; j++){
+
+                    if(hakjum==hakjums[j]){
+                        
+                        tr_Obj.show();
+                        if(cnt%2==1){
+                            tr_Obj.css({"background-color":"pink"});
+                        }
+                        cnt++;
+                    }
+                }
+
+
+            }
+            $(".count").text(cnt+"개");
+
+
+        });
+
+        $(".allSearch").click(function(){
+            
+
+            obj.find("tbody tr").css({"background-color":""});
+            
+            obj.find("tbody tr").show();
+            
+            obj.find("tbody tr:odd").css({"background-color":"pink"});
+
+            $(".keyword1").val("");
+
+            $(".count").text(obj.find("tbody tr").length+"개");
+
+            
+        })
+
+
+        
+
+    });
+
+</script>
+</head>
+<body class="xxx"><center>
+    <input type="checkbox" name="hakjum" value="A">A학점
+    <input type="checkbox" name="hakjum" value="B">B학점
+    <input type="checkbox" name="hakjum" value="C">C학점
+    <input type="checkbox" name="hakjum" value="D">D학점
+    <input type="checkbox" name="hakjum" value="F">F학점<br><br>
+
+    <input type="button" value="검색" class="search">
+    <input type="button" value="모두 검색" class="allSearch">
+    
+
+
+    <br><br>
+    <div class="count"></div>
+
+    <table class="sungjuk" border="1" cellpadding=5 cellspacing=0 style="border-collapse: collapse;">
+        <thead>
+            <tr><th>번호<th>이름<th>평균
+        </thead>
+        <tbody align="center">
+            <tr><td>101<td>최승환<td>90
+            <tr><td>102<td>김세정<td>92
+            <tr><td>103<td>아이린<td>83
+            <tr><td>104<td>John<td>47
+            <tr><td>105<td>최승범<td>68
+            <tr><td>106<td>Park<td>84
+            <tr><td>107<td>박민정<td>79
+            <tr><td>108<td>신세경<td>63
+            <tr><td>109<td>David<td>70
+            <tr><td>110<td>유재석<td>52
+            <tr><td>111<td>Panjun<td>95
+            <tr><td>112<td>Kyujin<td>82
+            <tr><td>113<td>Sanghwa<td>71
+        </tbody>
+    </table>
+
+    
+</body>
+</html>
